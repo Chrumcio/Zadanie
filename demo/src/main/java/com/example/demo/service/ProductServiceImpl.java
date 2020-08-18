@@ -29,6 +29,13 @@ public class ProductServiceImpl implements ProductService {
         // wywołanie metody, która zlicza sumaryczną wartość dodawanych produktów,
         // konieczne by przyznawać rabat proporcjonalnie do ceny
         int totalValue = countTotalValue(productRequestList);
+        // kiedy rabat jest większy od wartości całej listy produktów wtedy zostaje zwrócona użytkownikowi
+        // lista z nazwami produktów oraz zniżką w wysokości 0
+        if(totalValue < discount){
+            return productRequestList.stream()
+                    .map(tmp -> modelMapper.map(tmp, ProductResponse.class))
+                    .collect(Collectors.toList());
+        }
         int addedDiscount = 0;
         List<Product> products = new ArrayList<>();
         for(int i = 0; i < productRequestList.size(); i++){
